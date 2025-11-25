@@ -1,7 +1,8 @@
 use std::error::Error;
 use solana_client::rpc_client::RpcClient;
 use solana_program::pubkey::Pubkey;
-use solana_sdk::{system_transaction, signature::{Keypair, Signature}};
+use solana_sdk::{ signature::{Keypair, Signature}};
+use solana_system_transaction as system_transaction;
 
 const LAMPORTS_PER_SOL: f64 = 1000000000.0;
 

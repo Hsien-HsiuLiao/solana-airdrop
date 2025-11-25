@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-solana-sdk = "1.10.11"
-solana-client = "1.10.11"
-solana-program = "1.10.11"
+solana-sdk = "3.0.0"
+solana-client = "3.1.2"
+solana-program = "3.0.0"
+solana-system-transaction = "3.0.0"
