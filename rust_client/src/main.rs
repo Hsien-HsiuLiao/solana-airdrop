@@ -27,15 +27,54 @@ use solana_client::rpc_client::RpcClient;
 use rust_client::{check_balance, request_air_drop, transfer_funds, create_keypair};
 use solana_sdk::signer::Signer;
 
-//const URL: &str = "https://api.devnet.solana.com";
-const URL: &str = "http://127.0.0.1:8899";
+const URL: &str = "https://api.devnet.solana.com";
+//const URL: &str = "http://127.0.0.1:8899";
+
+// Wrapper struct to allow Debug implementation
+
+struct RpcClientWrapper {
+    url: String,
+    #[allow(dead_code)] // Suppress warning since we access it via as_ref()
+    client: RpcClient, 
+}
+
+impl RpcClientWrapper {
+    fn new(url: &str) -> Self {
+        Self {
+            url: url.to_string(),
+            client: RpcClient::new(url),
+        }
+    }
+    
+    fn as_ref(&self) -> &RpcClient {
+        &self.client
+    }
+}
+
+impl std::fmt::Debug for RpcClientWrapper {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "url: {}", self.url)
+    }
+}
 
 fn main() {
-    let rpc_client = RpcClient::new(URL);
+    let rpc_client_wrapper = RpcClientWrapper::new(URL);
+    let rpc_client = rpc_client_wrapper.as_ref();
+
+    match rpc_client.get_version() {
+        Ok(version) => {
+            println!("RPC is available. Version: {:?}", version); //Version: 3.0.6
+        },
+        Err(e) => {
+            println!("RPC is not available: {:?}", e);
+            return;
+        }
+    }
 
     let sender = create_keypair();
     let receiver = create_keypair();
 
+    println!("RPC Client: {:?}", rpc_client_wrapper);
     println!("Sender: {:?}", sender.pubkey());
     println!("Receiver: {:?}", receiver.pubkey());
 
